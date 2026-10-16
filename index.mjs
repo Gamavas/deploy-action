@@ -135,14 +135,18 @@ const list = files.map((f) => {
 });
 const totalBytes = list.reduce((sum, f) => sum + f.size, 0);
 console.log(
-  `Deploying ${list.length} files (${(totalBytes / 1024 / 1024).toFixed(1)} MB) from ${relative(process.cwd(), dir) || "."}…`,
+  `Deploying ${list.length} ${list.length === 1 ? "file" : "files"} (${(totalBytes / 1024 / 1024).toFixed(1)} MB) from ${relative(process.cwd(), dir) || "."}…`,
 );
 
 const { deploymentId, missing } = await call("POST", "/deployments", {
   files: list,
   ...gitDetails(),
 });
-console.log(missing.length ? `Uploading ${missing.length} new file(s)…` : "Nothing new to upload.");
+console.log(
+  missing.length
+    ? `Uploading ${missing.length} new ${missing.length === 1 ? "file" : "files"}…`
+    : "Nothing new to upload.",
+);
 for (let i = 0; i < missing.length; i += BATCH) {
   const hashes = missing.slice(i, i + BATCH).map((m) => m.hash);
   const { uploads } = await call("POST", `/deployments/${deploymentId}/upload-urls`, { hashes });
