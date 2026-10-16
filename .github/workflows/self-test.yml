@@ -1,0 +1,27 @@
+# Deploys a tiny page to Gamavas staging through the published action, then checks it's served.
+# Run it by hand after a release: Actions → Self-test → Run workflow.
+name: Self-test
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Which version of the action to test
+        default: v1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+      - id: edge
+        uses: ./
+        with:
+          token: ${{ secrets.GAMAVAS_STAGING_DEPLOY_TOKEN }}
+          dir: test/fixture
+          api-url: https://staging.gamavas.fun/api/host/v1
+      - name: Check the deployed page
+        run: |
+          echo "url=${{ steps.edge.outputs.url }} live=${{ steps.edge.outputs.live }}"
+          curl -fsS "${{ steps.edge.outputs.preview-url }}" | grep -q "Gamavas Edge self-test"
