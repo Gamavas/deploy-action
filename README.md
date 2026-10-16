@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
       # Build your game here (skip if the built files are committed), e.g.
       # - run: npm ci && npm run build
-      - uses: gamavas/deploy-action@v1
+      - uses: Gamavas/deploy-action@v1
         with:
           token: ${{ secrets.GAMAVAS_DEPLOY_TOKEN }}
           dir: dist # the folder with index.html in it
