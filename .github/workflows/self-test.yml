@@ -3,20 +3,15 @@
 name: Self-test
 on:
   workflow_dispatch:
-    inputs:
-      ref:
-        description: Which version of the action to test
-        default: v1
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.ref }}
+      # The published major version, as makers use it.
       - id: edge
-        uses: ./
+        uses: Gamavas/deploy-action@v1
         with:
           token: ${{ secrets.GAMAVAS_STAGING_DEPLOY_TOKEN }}
           dir: test/fixture
