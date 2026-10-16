@@ -1,0 +1,32 @@
+name: Deploy to Gamavas Edge
+description: Deploy a built web game to Gamavas Edge. Pushes go live; pull requests get a preview link.
+author: Gamavas
+branding:
+  icon: upload-cloud
+  color: yellow
+inputs:
+  token:
+    description: The project's deploy token (gvd_…), from its page in gamavas.fun/host. Store it as a secret.
+    required: true
+  dir:
+    description: The folder with your built game (the one containing index.html), e.g. dist or build/WebGL.
+    required: false
+    default: "."
+  production:
+    description: '"auto" (pushes go live, pull requests are previews), "true" or "false".'
+    required: false
+    default: auto
+  api-url:
+    description: The deploy API. Leave as is.
+    required: false
+    default: https://gamavas.fun/api/host/v1
+outputs:
+  url:
+    description: Where the game is now: the live address, or the preview for a pull request.
+  preview-url:
+    description: This deployment's own preview address.
+  live:
+    description: '"true" if this deployment is now live.'
+runs:
+  using: node24
+  main: index.mjs
